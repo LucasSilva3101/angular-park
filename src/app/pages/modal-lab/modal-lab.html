@@ -1,0 +1,219 @@
+<section class="modal-page">
+  <a class="back-link" routerLink="/">← Voltar</a>
+
+  <div class="hero">
+    <p class="eyebrow">Modal Lab</p>
+    <h1>Laboratório de modais e overlays</h1>
+    <p class="subtitle">
+      Teste modal central, modal com imagem, drawer lateral, dropdown e toast em uma mesma tela.
+    </p>
+  </div>
+
+  <div class="actions-grid">
+    <article class="action-card">
+      <span class="action-badge">Dialog</span>
+      <h2>Modal central</h2>
+      <p>Overlay clássico com foco em confirmação, aviso ou formulário rápido.</p>
+      <button type="button" class="primary-btn" (click)="openModal()">
+        Abrir modal
+      </button>
+    </article>
+
+    <article class="action-card">
+      <span class="action-badge">Photo</span>
+      <h2>Modal com foto</h2>
+      <p>Ideal para visualização ampliada de imagem, produto, banner ou galeria.</p>
+      <button type="button" class="primary-btn" (click)="openPhotoModal()">
+        Abrir foto
+      </button>
+    </article>
+
+    <article class="action-card">
+      <span class="action-badge">Sidebar</span>
+      <h2>Drawer lateral</h2>
+      <p>Painel lateral ideal para filtros, menu contextual ou ações secundárias.</p>
+      <button type="button" class="primary-btn" (click)="openDrawer()">
+        Abrir drawer
+      </button>
+    </article>
+
+    <article class="action-card dropdown-card">
+      <span class="action-badge">Menu</span>
+      <h2>Dropdown</h2>
+      <p>Menu rápido para ações pequenas dentro da interface.</p>
+
+      <div class="dropdown-wrapper">
+        <button type="button" class="primary-btn" (click)="toggleDropdown()">
+          {{ showDropdown ? 'Fechar menu' : 'Abrir menu' }}
+        </button>
+
+        <div class="dropdown-panel" *ngIf="showDropdown">
+          <button type="button" (click)="openToast('info', 'Ação de visualização executada.')">
+            Visualizar
+          </button>
+          <button type="button" (click)="openToast('success', 'Item salvo com sucesso.')">
+            Salvar
+          </button>
+          <button type="button" (click)="openToast('warning', 'Ação de exclusão simulada.')">
+            Excluir
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <article class="action-card">
+      <span class="action-badge">Feedback</span>
+      <h2>Toast</h2>
+      <p>Mensagem flutuante para feedback rápido sem bloquear a interface.</p>
+
+      <div class="toast-actions">
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="openToast('success', 'Operação concluída com sucesso.')"
+        >
+          Toast sucesso
+        </button>
+
+        <button
+          type="button"
+          class="ghost-btn"
+          (click)="openToast('warning', 'Atenção: revise os dados antes de continuar.')"
+        >
+          Toast alerta
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <!-- MODAL PADRÃO -->
+  <div
+    class="overlay"
+    *ngIf="showModal"
+    (click)="onOverlayClick($event, closeModal.bind(this))"
+  >
+    <div class="modal-box">
+      <span class="surface-tag">Modal</span>
+      <h2>Confirmar ação</h2>
+      <p>
+        Este modal simula uma confirmação importante dentro da aplicação.
+        Você pode fechar clicando fora ou no botão abaixo.
+      </p>
+
+      <div class="surface-actions">
+        <button type="button" class="ghost-btn" (click)="closeModal()">Cancelar</button>
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="closeModal(); openToast('success', 'Ação confirmada com sucesso.')"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL COM FOTO -->
+  <div
+    class="overlay"
+    *ngIf="showPhotoModal"
+    (click)="onOverlayClick($event, closePhotoModal.bind(this))"
+  >
+    <div class="photo-modal-box">
+      <div class="photo-modal-header">
+        <div>
+          <span class="surface-tag">Image Preview</span>
+          <h2>{{ photoTitle }}</h2>
+        </div>
+
+        <button type="button" class="icon-btn" (click)="closePhotoModal()">✕</button>
+      </div>
+
+      <div class="photo-frame">
+        <img [src]="photoUrl" [alt]="photoTitle" />
+      </div>
+
+      <p class="photo-description">{{ photoDescription }}</p>
+
+      <div class="surface-actions">
+        <button type="button" class="ghost-btn" (click)="closePhotoModal()">
+          Fechar
+        </button>
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="closePhotoModal(); openToast('info', 'Imagem visualizada com sucesso.')"
+        >
+          Confirmar visualização
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER -->
+  <div
+    class="overlay drawer-overlay"
+    *ngIf="showDrawer"
+    (click)="onOverlayClick($event, closeDrawer.bind(this))"
+  >
+    <aside class="drawer-panel">
+      <div class="drawer-header">
+        <div>
+          <span class="surface-tag">Drawer</span>
+          <h2>Painel lateral</h2>
+        </div>
+
+        <button type="button" class="icon-btn" (click)="closeDrawer()">✕</button>
+      </div>
+
+      <p class="drawer-text">
+        Aqui você pode testar a ideia de um painel de filtros, preferências
+        rápidas ou detalhes contextuais sem trocar de página.
+      </p>
+
+      <div class="drawer-section">
+        <h3>Filtros simulados</h3>
+
+        <label class="check-row">
+          <input type="checkbox" />
+          <span>Somente ativos</span>
+        </label>
+
+        <label class="check-row">
+          <input type="checkbox" />
+          <span>Com prioridade alta</span>
+        </label>
+
+        <label class="check-row">
+          <input type="checkbox" />
+          <span>Atualizados hoje</span>
+        </label>
+      </div>
+
+      <div class="surface-actions drawer-actions">
+        <button type="button" class="ghost-btn" (click)="closeDrawer()">Fechar</button>
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="closeDrawer(); openToast('info', 'Filtros aplicados de forma simulada.')"
+        >
+          Aplicar filtros
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" *ngIf="showToast" [ngClass]="toastType">
+    <strong>
+      {{
+        toastType === 'success'
+          ? 'Sucesso'
+          : toastType === 'warning'
+          ? 'Atenção'
+          : 'Informação'
+      }}
+    </strong>
+    <p>{{ toastMessage }}</p>
+  </div>
+</section>

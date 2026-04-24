@@ -1,0 +1,151 @@
+<section class="game-page">
+  <a class="back-link" routerLink="/">← Voltar</a>
+
+  <div class="hero">
+    <p class="eyebrow">Drag & Drop Lab</p>
+    <h1>Jogo da velha com regras de movimento</h1>
+    <p class="subtitle">
+      Ordem fixa das peças: X1, O1, X2, O2, X3, O3. Depois disso, o ciclo de
+      movimento continua com a peça 1, depois 2 e depois 3.
+    </p>
+  </div>
+
+  <div class="top-bar">
+    <div class="status-card">
+      <span class="status-label">Turno atual</span>
+      <strong [class.turn-x]="currentTurn === 'X'" [class.turn-o]="currentTurn === 'O'">
+        {{ currentTurn }}
+      </strong>
+    </div>
+
+    <div class="status-card">
+      <span class="status-label">Próxima peça</span>
+      <strong class="next-piece">{{ getNextPieceLabel() }}</strong>
+    </div>
+
+    <div class="status-card winner-card" *ngIf="winner">
+      <span class="status-label">Vencedor</span>
+      <strong class="winner-text">{{ winner }}</strong>
+    </div>
+
+    <button type="button" class="reset-btn" (click)="resetGame()">
+      Reiniciar jogo
+    </button>
+  </div>
+
+  <div class="game-layout">
+    <aside class="pieces-panel">
+      <div class="pool-block">
+        <h2>Peças X</h2>
+        <div
+          cdkDropList
+          id="pool-x"
+          [cdkDropListData]="poolX"
+          [cdkDropListConnectedTo]="dropListIds"
+          class="pool-list"
+        >
+          <div
+            class="piece piece-x"
+            *ngFor="let piece of poolX"
+            cdkDrag
+            [cdkDragData]="piece"
+          >
+            {{ piece.label }}
+          </div>
+        </div>
+      </div>
+
+      <div class="pool-block">
+        <h2>Peças O</h2>
+        <div
+          cdkDropList
+          id="pool-o"
+          [cdkDropListData]="poolO"
+          [cdkDropListConnectedTo]="dropListIds"
+          class="pool-list"
+        >
+          <div
+            class="piece piece-o"
+            *ngFor="let piece of poolO"
+            cdkDrag
+            [cdkDragData]="piece"
+          >
+            {{ piece.label }}
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="board-section">
+      <div class="board-wrapper">
+        <div class="board">
+          <div
+            class="win-line"
+            *ngIf="winnerLine"
+            [ngClass]="winnerLine"
+          ></div>
+
+          <div
+            class="cell"
+            *ngFor="let cell of board; let i = index"
+            cdkDropList
+            [id]="cell.id"
+            [cdkDropListData]="cell"
+            [cdkDropListConnectedTo]="dropListIds"
+            (cdkDropListDropped)="drop($event, i)"
+          >
+            <div
+              class="placed-piece"
+              *ngIf="getCellPiece(i) as piece"
+              cdkDrag
+              [cdkDragData]="piece"
+              [cdkDragDisabled]="winner !== null"
+              (cdkDragStarted)="onPlacedPieceDragStarted(piece)"
+              [class.piece-x]="piece.type === 'X'"
+              [class.piece-o]="piece.type === 'O'"
+            >
+              {{ piece.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rules-box">
+        <h3>Regras</h3>
+        <ul>
+          <li>X sempre começa.</li>
+          <li>A ordem é X1, O1, X2, O2, X3, O3.</li>
+          <li>Depois disso, o ciclo volta para peça 1, depois 2 e depois 3.</li>
+          <li>Se tentar mover uma peça errada, o sistema mostra um aviso.</li>
+          <li>3 iguais na horizontal, vertical ou diagonal vencem o jogo.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showInfoModal">
+    <div class="modal-box">
+      <h2>Movimento não permitido</h2>
+      <p>{{ modalMessage }}</p>
+      <button type="button" class="modal-btn" (click)="closeInfoModal()">
+        Entendi
+      </button>
+    </div>
+  </div>
+
+  <div class="modal-overlay winner-overlay" *ngIf="showWinnerModal">
+    <div class="winner-modal-box">
+      <span class="winner-badge">Vitória</span>
+      <h2>{{ winnerMessage }}</h2>
+      <p>As três peças formaram uma linha vencedora.</p>
+
+      <div class="winner-symbol">
+        {{ winner }}
+      </div>
+
+      <button type="button" class="modal-btn winner-btn" (click)="closeWinnerModal()">
+        Fechar
+      </button>
+    </div>
+  </div>
+</section>

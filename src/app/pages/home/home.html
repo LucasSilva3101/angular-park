@@ -1,0 +1,26 @@
+<section class="home">
+  <div class="hero">
+    <p class="eyebrow">Angular Playground</p>
+    <h1>Meu parque de testes com Angular</h1>
+    <p class="subtitle">
+      Um espaço para brincar com animações, rotas, drag and drop, formulários
+      e componentes visuais.
+    </p>
+  </div>
+
+  <div class="cards-grid">
+    <article class="lab-card" *ngFor="let lab of labs" [routerLink]="lab.route">
+      <span class="badge">{{ lab.badge }}</span>
+
+      <h2>{{ lab.title }}</h2>
+      <p>{{ lab.description }}</p>
+
+      <div class="card-footer">
+        <span class="route">{{ lab.route }}</span>
+        <button type="button" [routerLink]="lab.route" (click)="$event.stopPropagation()">
+          Abrir
+        </button>
+      </div>
+    </article>
+  </div>
+</section>

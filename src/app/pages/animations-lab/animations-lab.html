@@ -1,0 +1,89 @@
+<section class="lab-page">
+  <div class="background-orb orb-1"></div>
+  <div class="background-orb orb-2"></div>
+  <div class="background-grid"></div>
+
+  <a class="back-link" routerLink="/">← Voltar</a>
+
+  <div class="hero">
+    <p class="eyebrow">Animations Lab</p>
+    <h1>Laboratório de animações e microinterações</h1>
+    <p class="subtitle">
+      Explore entradas, escala, rotação, glow e transições visuais para montar
+      interfaces mais vivas e modernas.
+    </p>
+  </div>
+
+  <div class="filters">
+    <button
+      type="button"
+      class="filter-chip"
+      *ngFor="let filter of filters"
+      [class.active]="selectedType === filter.value"
+      (click)="selectType(filter.value)"
+    >
+      {{ filter.label }}
+    </button>
+  </div>
+
+  <section class="preview-section">
+    <div class="preview-card">
+      <div class="preview-header">
+        <div>
+          <span class="preview-tag">Preview</span>
+          <h2>Visualizador principal</h2>
+        </div>
+
+        <span class="preview-mode">{{ selectedType }}</span>
+      </div>
+
+      <p class="preview-description">
+        Troque os filtros ou clique em um card abaixo para reexecutar e comparar
+        os efeitos.
+      </p>
+
+      <div class="preview-stage">
+        <div class="preview-ring ring-1"></div>
+        <div class="preview-ring ring-2"></div>
+
+        <div class="preview-box" [ngClass]="selectedType">
+          <span class="preview-box-badge">Demo</span>
+          <strong>Teste visual</strong>
+          <small>Animação aplicada em tempo real</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cards-section">
+    <div class="section-title">
+      <h3>Galeria de efeitos</h3>
+      <p>Clique em qualquer card para ativar o efeito correspondente.</p>
+    </div>
+
+    <div class="cards-grid">
+      <article
+        class="demo-card"
+        *ngFor="let card of cards; let i = index"
+        [class.active]="activeCard === card.title"
+        [style.animationDelay]="(i * 100) + 'ms'"
+        (click)="setActiveCard(card)"
+      >
+        <div class="card-glow"></div>
+
+        <span class="tag">{{ card.tag }}</span>
+        <h2>{{ card.title }}</h2>
+        <p>{{ card.description }}</p>
+
+        <div class="card-footer">
+          <span class="card-type">{{ card.type }}</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div id="lab-toast" class="toast" [class.show]="showToast">
+    Animação selecionada.
+  </div>
+</section>

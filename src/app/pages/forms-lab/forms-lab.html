@@ -1,0 +1,388 @@
+<section class="forms-page">
+  <a class="back-link" routerLink="/">← Voltar</a>
+
+  <div class="hero">
+    <p class="eyebrow">Forms Lab</p>
+    <h1>Laboratório de formulários</h1>
+    <p class="subtitle">
+      Teste diferentes tipos de formulários, validações, layouts e estilos em uma única página.
+    </p>
+  </div>
+
+  <div class="tabs premium-tabs">
+    <button
+      *ngFor="let tab of tabs"
+      [class.active]="selectedTab === tab.key"
+      (click)="setTab(tab.key)"
+    >
+      <span class="tab-icon">{{ tab.icon }}</span>
+      <span>{{ tab.label }}</span>
+    </button>
+  </div>
+
+  <div class="tab-highlight">
+    <div class="tab-highlight-icon">{{ activeTabInfo.icon }}</div>
+    <div>
+      <h2>{{ activeTabInfo.label }}</h2>
+      <p>{{ activeTabInfo.description }}</p>
+    </div>
+  </div>
+
+  <div class="feedback-stack" *ngIf="successMessage || errorMessage">
+    <div class="feedback success" *ngIf="successMessage">
+      <strong>Sucesso</strong>
+      <p>{{ successMessage }}</p>
+    </div>
+
+    <div class="feedback error" *ngIf="errorMessage">
+      <strong>Atenção</strong>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+
+  <div class="form-shell">
+    <div
+      class="form-animator"
+      [attr.data-render-key]="formRenderKey"
+      [ngClass]="activeAnimationClass"
+    >
+
+      <!-- LOGIN -->
+      <div class="form-card compact premium-surface" *ngIf="renderedTab === 'login'">
+        <h2>Entrar na conta</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+          <div class="field">
+            <label>Email</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="seuemail@teste.com"
+              [class.invalid-field]="isInvalid('email', 'login')"
+            />
+            <small *ngIf="isInvalid('email', 'login')">Informe um email válido.</small>
+          </div>
+
+          <div class="field">
+            <label>Senha</label>
+            <div class="password-wrap">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Digite sua senha"
+                [class.invalid-field]="isInvalid('password', 'login')"
+              />
+              <button type="button" class="inline-btn" (click)="showPassword = !showPassword">
+                {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+              </button>
+            </div>
+            <small *ngIf="isInvalid('password', 'login')">
+              A senha precisa ter ao menos 6 caracteres.
+            </small>
+          </div>
+
+          <label class="check-row">
+            <input type="checkbox" formControlName="remember" />
+            <span>Lembrar de mim</span>
+          </label>
+
+          <button type="submit" class="submit-btn">Entrar</button>
+        </form>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="form-card premium-surface" *ngIf="renderedTab === 'register'">
+        <h2>Criar conta</h2>
+
+        <div class="stepper">
+          <div class="step" [class.active]="registerStep === 1" [class.done]="registerStep > 1">1</div>
+          <div class="step-line"></div>
+          <div class="step" [class.active]="registerStep === 2">2</div>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+          <div *ngIf="registerStep === 1" class="grid-form">
+            <div class="field full">
+              <label>Nome completo</label>
+              <input
+                type="text"
+                formControlName="fullName"
+                placeholder="Lucas da Silva Gomes"
+                [class.invalid-field]="isInvalid('fullName', 'register')"
+              />
+              <small *ngIf="isInvalid('fullName', 'register')">
+                Informe seu nome completo.
+              </small>
+            </div>
+
+            <div class="field">
+              <label>Email</label>
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="email@teste.com"
+                [class.invalid-field]="isInvalid('email', 'register')"
+              />
+              <small *ngIf="isInvalid('email', 'register')">Email inválido.</small>
+            </div>
+
+            <div class="field">
+              <label>Telefone</label>
+              <input
+                type="text"
+                formControlName="phone"
+                placeholder="(11) 99999-9999"
+                (input)="onPhoneInput()"
+                [class.invalid-field]="isInvalid('phone', 'register')"
+              />
+              <small *ngIf="isInvalid('phone', 'register')">Telefone obrigatório.</small>
+            </div>
+
+            <div class="full action-row">
+              <button type="button" class="submit-btn" (click)="nextRegisterStep()">
+                Continuar
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="registerStep === 2" class="grid-form">
+            <div class="field">
+              <label>Senha</label>
+              <div class="password-wrap">
+                <input
+                  [type]="showRegisterPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  placeholder="Crie uma senha"
+                  [class.invalid-field]="isInvalid('password', 'register')"
+                />
+                <button
+                  type="button"
+                  class="inline-btn"
+                  (click)="showRegisterPassword = !showRegisterPassword"
+                >
+                  {{ showRegisterPassword ? 'Ocultar' : 'Mostrar' }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Confirmar senha</label>
+              <div class="password-wrap">
+                <input
+                  [type]="showRegisterConfirmPassword ? 'text' : 'password'"
+                  formControlName="confirmPassword"
+                  placeholder="Repita a senha"
+                  [class.invalid-field]="isInvalid('confirmPassword', 'register')"
+                />
+                <button
+                  type="button"
+                  class="inline-btn"
+                  (click)="showRegisterConfirmPassword = !showRegisterConfirmPassword"
+                >
+                  {{ showRegisterConfirmPassword ? 'Ocultar' : 'Mostrar' }}
+                </button>
+              </div>
+            </div>
+
+            <div class="full action-row spaced">
+              <button type="button" class="ghost-btn" (click)="prevRegisterStep()">
+                Voltar
+              </button>
+              <button type="submit" class="submit-btn">Cadastrar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="form-card warm premium-surface" *ngIf="renderedTab === 'contact'">
+        <h2>Contato / Suporte</h2>
+        <form [formGroup]="contactForm" (ngSubmit)="submitContact()">
+          <div class="field">
+            <label>Nome</label>
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Seu nome"
+              [class.invalid-field]="isInvalid('name', 'contact')"
+            />
+          </div>
+
+          <div class="field">
+            <label>Assunto</label>
+            <input
+              type="text"
+              formControlName="subject"
+              placeholder="Ex: erro no sistema"
+              [class.invalid-field]="isInvalid('subject', 'contact')"
+            />
+          </div>
+
+          <div class="field">
+            <label>Categoria</label>
+            <select formControlName="category">
+              <option value="suporte">Suporte</option>
+              <option value="financeiro">Financeiro</option>
+              <option value="comercial">Comercial</option>
+              <option value="geral">Geral</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Mensagem</label>
+            <textarea
+              formControlName="message"
+              rows="5"
+              placeholder="Descreva sua solicitação"
+              [class.invalid-field]="isInvalid('message', 'contact')"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Enviar mensagem</button>
+        </form>
+      </div>
+
+      <!-- CHECKOUT -->
+      <div class="form-card premium premium-surface checkout-layout" *ngIf="renderedTab === 'checkout'">
+        <div class="checkout-preview">
+          <div class="credit-card-visual">
+            <div class="card-chip"></div>
+            <div class="card-brand">VISA</div>
+
+            <div class="card-number">
+              {{ cardPreviewNumber }}
+            </div>
+
+            <div class="card-footer-preview">
+              <div>
+                <span class="card-label">Card Holder</span>
+                <strong>{{ cardPreviewName }}</strong>
+              </div>
+
+              <div>
+                <span class="card-label">Expires</span>
+                <strong>{{ cardPreviewExpiry }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-form-side">
+          <h2>Checkout</h2>
+          <form [formGroup]="checkoutForm" (ngSubmit)="submitCheckout()" class="grid-form">
+            <div class="field full">
+              <label>Nome no cartão</label>
+              <input
+                type="text"
+                formControlName="cardName"
+                placeholder="Nome impresso no cartão"
+                [class.invalid-field]="isInvalid('cardName', 'checkout')"
+              />
+            </div>
+
+            <div class="field full">
+              <label>Número do cartão</label>
+              <input
+                type="text"
+                formControlName="cardNumber"
+                placeholder="1234 5678 9012 3456"
+                [value]="cardPreviewNumber"
+                (input)="onCardNumberInput()"
+                [class.invalid-field]="isInvalid('cardNumber', 'checkout')"
+              />
+            </div>
+
+            <div class="field">
+              <label>Validade</label>
+              <input
+                type="text"
+                formControlName="expiry"
+                placeholder="MM/AA"
+                [value]="cardPreviewExpiry"
+                (input)="onExpiryInput()"
+                [class.invalid-field]="isInvalid('expiry', 'checkout')"
+              />
+            </div>
+
+            <div class="field">
+              <label>CVV</label>
+              <input
+                type="text"
+                formControlName="cvv"
+                placeholder="123"
+                (input)="onCvvInput()"
+                [class.invalid-field]="isInvalid('cvv', 'checkout')"
+              />
+            </div>
+
+            <div class="full">
+              <button type="submit" class="submit-btn">Pagar agora</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="form-card glass premium-surface" *ngIf="renderedTab === 'profile'">
+        <h2>Perfil e preferências</h2>
+        <form [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+          <div class="profile-top">
+            <div class="avatar-preview">
+              <img
+                *ngIf="avatarPreview; else avatarPlaceholder"
+                [src]="avatarPreview"
+                alt="Avatar preview"
+              />
+              <ng-template #avatarPlaceholder>
+                <div class="avatar-placeholder">👤</div>
+              </ng-template>
+            </div>
+
+            <div class="avatar-actions">
+              <label class="upload-btn">
+                <input type="file" accept="image/*" (change)="onAvatarFileChange($event)" hidden />
+                Enviar avatar
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Username</label>
+            <input
+              type="text"
+              formControlName="username"
+              placeholder="@lucas"
+              [class.invalid-field]="isInvalid('username', 'profile')"
+            />
+          </div>
+
+          <div class="field">
+            <label>Avatar URL</label>
+            <input
+              type="text"
+              formControlName="avatarUrl"
+              placeholder="https://..."
+            />
+          </div>
+
+          <div class="field">
+            <label>Bio</label>
+            <textarea formControlName="bio" rows="4" placeholder="Escreva algo sobre você"></textarea>
+          </div>
+
+          <label class="check-row">
+            <input type="checkbox" formControlName="notifications" />
+            <span>Receber notificações</span>
+          </label>
+
+          <label class="check-row">
+            <input type="checkbox" formControlName="newsletter" />
+            <span>Receber newsletter</span>
+          </label>
+
+          <button type="submit" class="submit-btn">Salvar perfil</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+<section class="child-page">
+  <h2>Playground</h2>
+  <p class="description">
+    Clique nos cards abaixo para navegar para uma rota dinâmica com ID.
+  </p>
+
+  <div class="playground-grid">
+    <a
+      class="play-card"
+      *ngFor="let card of cards"
+      [routerLink]="['/labs/router/details', card.id]"
+    >
+      <h3>{{ card.title }}</h3>
+      <p>{{ card.text }}</p>
+      <span>Ir para /details/{{ card.id }}</span>
+    </a>
+  </div>
+</section>

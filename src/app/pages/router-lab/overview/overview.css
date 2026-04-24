@@ -1,0 +1,23 @@
+.child-page h2 {
+  margin: 0 0 12px;
+  font-size: 1.7rem;
+}
+
+.description {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.feature-list {
+  display: grid;
+  gap: 14px;
+}
+
+.feature-item {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}

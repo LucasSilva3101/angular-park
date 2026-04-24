@@ -1,0 +1,33 @@
+<section class="router-lab-page">
+  <a class="back-link" routerLink="/">← Voltar</a>
+
+  <div class="hero">
+    <p class="eyebrow">Router Lab</p>
+    <h1>Laboratório de navegação e rotas</h1>
+    <p class="subtitle">
+      Aqui você pode testar rotas filhas, parâmetros dinâmicos, navegação interna
+      e estados visuais de links ativos.
+    </p>
+  </div>
+
+  <section class="top-cards">
+    <article class="route-card" *ngFor="let card of cards">
+      <span class="route-tag">{{ card.tag }}</span>
+
+      <h2>{{ card.title }}</h2>
+      <p>{{ card.description }}</p>
+
+      <div class="route-meta">
+        <span class="route-path">{{ card.targetLabel }}</span>
+      </div>
+
+      <a class="route-button" [routerLink]="card.route">
+        {{ card.cta }}
+      </a>
+    </article>
+  </section>
+
+  <main class="content-panel full-width">
+    <router-outlet></router-outlet>
+  </main>
+</section>

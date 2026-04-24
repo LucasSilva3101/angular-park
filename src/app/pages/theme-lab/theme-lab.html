@@ -1,0 +1,57 @@
+<section class="theme-page">
+  <a class="back-link" routerLink="/">← Voltar</a>
+
+  <div class="hero">
+    <p class="eyebrow">Theme Lab</p>
+    <h1>Laboratório de temas globais</h1>
+    <p class="subtitle">
+      Aqui você pode trocar o plano de fundo e o esquema de cores do projeto inteiro.
+      O tema escolhido é salvo e continua aplicado nas outras páginas.
+    </p>
+  </div>
+
+  <div class="theme-grid">
+    <article
+      class="theme-card"
+      *ngFor="let theme of themes"
+      [class.active]="selectedTheme === theme.key"
+    >
+      <span class="theme-badge">{{ theme.badge }}</span>
+
+      <h2>{{ theme.name }}</h2>
+      <p>{{ theme.description }}</p>
+
+      <button
+        type="button"
+        class="theme-btn"
+        (click)="applyTheme(theme.key)"
+      >
+        {{ selectedTheme === theme.key ? 'Tema ativo' : 'Aplicar tema' }}
+      </button>
+    </article>
+  </div>
+
+  <section class="preview-panel">
+    <h3>Preview do sistema</h3>
+
+    <div class="preview-grid">
+      <div class="preview-box">
+        <span class="preview-label">Card</span>
+        <strong>Superfície principal</strong>
+        <p>Exemplo de card usando as variáveis do tema atual.</p>
+      </div>
+
+      <div class="preview-box accent">
+        <span class="preview-label">Botão</span>
+        <strong>Cor de destaque</strong>
+        <p>Esse bloco usa a cor principal do tema ativo.</p>
+      </div>
+
+      <div class="preview-box soft">
+        <span class="preview-label">Overlay</span>
+        <strong>Superfície suave</strong>
+        <p>Exemplo de painel secundário com contraste moderado.</p>
+      </div>
+    </div>
+  </section>
+</section>

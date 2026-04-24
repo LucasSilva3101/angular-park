@@ -1,0 +1,46 @@
+.child-page h2 {
+  margin: 0 0 12px;
+  font-size: 1.7rem;
+}
+
+.description {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.mini-back {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.detail-card {
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+}
+
+.detail-badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+}
+
+.detail-card h3 {
+  margin: 0 0 12px;
+  font-size: 2rem;
+}
+
+.detail-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}

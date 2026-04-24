@@ -2,6 +2,8 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.3.
 
+https://lucassilva3101.github.io/angular-park/
+
 ## Development server
 
 To start a local development server, run:
